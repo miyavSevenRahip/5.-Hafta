@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste Uygulaması</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex justify-center items-center h-screen">
+
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
+        <input id="listName" type="text" placeholder="Yeni liste adı..." class="w-full p-2 mb-2 text-black rounded">
+        <button onclick="createList()" class="w-full bg-blue-500 hover:bg-blue-600 p-2 rounded text-white">Yeni Liste Oluştur</button>
+        
+        <div id="lists" class="mt-4"></div>
+    </div>
+
+    <script>
+        function createList() {
+            let listName = document.getElementById('listName').value;
+            if (!listName) return alert('Liste ismi giriniz.');
+
+            let listsContainer = document.getElementById('lists');
+
+            let listDiv = document.createElement('div');
+            listDiv.classList = "bg-gray-700 p-4 mt-4 rounded";
+
+            listDiv.innerHTML = `
+                <h3 class="text-lg font-bold">${listName}</h3>
+                <input type="text" class="w-full p-2 mt-2 text-black rounded" placeholder="Yeni öğe ekleyin...">
+                <button onclick="addItem(this)" class="w-full bg-green-500 hover:bg-green-600 p-2 mt-2 rounded text-white">Öğe Ekle</button>
+                <ul class="mt-2"></ul>
+            `;
+
+            listsContainer.appendChild(listDiv);
+            document.getElementById('listName').value = '';
+        }
+
+        function addItem(button) {
+            let input = button.previousElementSibling;
+            let value = input.value;
+            if (!value) return;
+
+            let ul = button.nextElementSibling;
+            let li = document.createElement('li');
+            li.classList = "flex justify-between items-center bg-gray-600 p-2 mt-2 rounded";
+
+            li.innerHTML = `
+                <span>${value}</span>
+                <div>
+                    <button onclick="completeItem(this)" class="bg-green-500 hover:bg-green-600 p-1 text-white rounded">Tamamla</button>
+                    <button onclick="deleteItem(this)" class="bg-red-500 hover:bg-red-600 p-1 text-white rounded ml-2">Sil</button>
+                </div>
+            `;
+
+            ul.appendChild(li);
+            input.value = '';
+        }
+
+        function completeItem(button) {
+            button.parentElement.previousElementSibling.classList.toggle("line-through");
+        }
+
+        function deleteItem(button) {
+            button.parentElement.parentElement.remove();
+        }
+    </script>
+</body>
+</html>
